@@ -11,7 +11,7 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='xxxxxxxx',
+            password='el89829603',
             database='demo',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
@@ -22,17 +22,20 @@ def connect_to_db():
         print(f"帳密或資料庫、伺服器輸入錯誤: {e}")
         return None
 
-# 執行SQL查詢
-def execute_sql(connection, sql):
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            result = cursor.fetchall()
-        return result
-    except pymysql.MySQLError as e:
-        return f"SQL query error: {e}"
-    finally:
-        connection.close()
+# 執行多筆SQL查詢
+def execute_sql(connection, queries): 
+    try: 
+        with connection.cursor() as cursor: 
+            results = [] 
+            # 拆分成多個 SQL 語句 
+            for query in queries:
+                if query.strip(): # 確保語句不為空 
+                    cursor.execute(query) 
+                    results.append(cursor.fetchall()) 
+            return results 
+    except pymysql.MySQLError as e: 
+        return f"SQL query error: {e}" 
+    finally: connection.close()
 
 # datetime格式轉換
 def default_converter(o):
