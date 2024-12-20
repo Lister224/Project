@@ -11,8 +11,8 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='el89829603',
-            database='demo',
+            password='xxxxxxxx',
+            database='finvision',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -56,7 +56,7 @@ def query_database(sql_query: str):
         return "無法連接到資料庫"
     
 # 讀取csv print csv
-def csv_read(file_path='tables_and_columns.csv'):
+def csv_read(file_path='finvision_tables_and_columns.csv'):
     df = pd.read_csv(file_path)
     csv_string = df.to_csv(index=False)
     return csv_string
