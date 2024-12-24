@@ -11,8 +11,8 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='xxxxxxxx',
-            database='finvision',
+            password='el89829603',
+            database='finvison',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -56,11 +56,15 @@ def query_database(sql_query: str):
         return "無法連接到資料庫"
     
 # 讀取csv print csv
-def csv_read(file_path='finvision_tables_and_columns.csv'):
+def csv_read(file_path='finvison_tables_and_columns.csv'):
     df = pd.read_csv(file_path)
     csv_string = df.to_csv(index=False)
     return csv_string
 
+# # 測試連線
+# sql_query =  ['SELECT NSR FROM pl WHERE seasonsID = 202001;']
+# result = query_database(sql_query)
+# print(result)
 
 
 #     # 建立映射表
