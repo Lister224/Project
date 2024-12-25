@@ -11,7 +11,7 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='el89829603',
+            password='xxxxxxxx',
             database='finvison',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
