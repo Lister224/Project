@@ -11,7 +11,7 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='xxxxxxx',
+            password='el89829603',
             database='finvison',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
@@ -49,11 +49,13 @@ def default_converter(o):
 # 返回查詢結果，轉json
 def query_database(sql_query: str):
     connection = connect_to_db()
-    if connection:
-        result = execute_sql(connection, sql_query)
-        return json.dumps(result, default=default_converter, ensure_ascii=False)
+    result = execute_sql(connection, sql_query)
+    # 判斷查詢結果是否成功
+    if "SQL query error" not in result:  # 假設 execute_sql 成功時會返回結果，失敗時可能返回 None 或空列表
+        return json.dumps({"status": "查詢成功", "data": result}, default=default_converter, ensure_ascii=False)
     else:
-        return "無法連接到資料庫"
+        return json.dumps({"status":"查詢失敗", "message": result}, ensure_ascii=False) # 查詢失敗返回訊息
+ 
     
 # 讀取csv print csv
 def csv_read(file_path='finvison_tables_and_columns.csv'):
