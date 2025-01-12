@@ -4,6 +4,7 @@ from json import loads, dumps
 import json
 from datetime import datetime,date
 from decimal import Decimal
+import os
 
 # 連接到資料庫
 def connect_to_db():
@@ -11,8 +12,8 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='xxxx',
-            database='finvison',
+            password='el89829603',
+            database='finvision',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -57,11 +58,18 @@ def query_database(sql_query: str):
         return json.dumps({"status":"查詢失敗", "message": result}, ensure_ascii=False) # 查詢失敗返回訊息
  
     
+# 動態獲取檔案路徑
+def get_file_path(relative_path):
+    base_path = os.path.abspath(os.path.dirname(__file__))
+    return os.path.join(base_path, relative_path)
+
 # 讀取csv print csv
-def csv_read(file_path='finvison_tables_and_columns.csv'):
+def csv_read(file_name:str):
+    file_path = get_file_path(file_name)
     df = pd.read_csv(file_path)
     csv_string = df.to_csv(index=False)
     return csv_string
+
 
 # # 測試連線
 # sql_query =  ['SELECT NSR FROM pl WHERE seasonsID = 202001;']
