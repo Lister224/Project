@@ -11,8 +11,8 @@ def connect_to_db():
         connection = pymysql.connect(
             host='127.0.0.1',
             user='root',
-            password='xxxx',
-            database='finvison',
+            password='qazw1314520',
+            database='finvision',
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -58,7 +58,7 @@ def query_database(sql_query: str):
  
     
 # 讀取csv print csv
-def csv_read(file_path='finvison_tables_and_columns.csv'):
+def csv_read(file_path=r'C:\Project_Tibame_Capstone\Project\flask_app\LLM4sql\finvision_tables_and_columns.csv'):
     df = pd.read_csv(file_path)
     csv_string = df.to_csv(index=False)
     return csv_string
