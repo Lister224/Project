@@ -21,7 +21,7 @@ class Database:
                 charset=self.charset,
                 cursorclass=pymysql.cursors.DictCursor
             )
-            print("連線成功")
+            
         except pymysql.MySQLError as e:
             print(f"帳密或資料庫、伺服器輸入錯誤: {e}")
             self.connection = None
@@ -44,7 +44,7 @@ class Database:
     def close(self):
         if self.connection and self.connection.open:
             self.connection.close()
-            print("連線已關閉")
+            
 
 # 取db資料
 def get_data(column_name: str):
@@ -114,89 +114,75 @@ def create_control_charts(index_data):
         df = df.iloc[3:]
         
         # 準備每個欄位的結果
-        chart_data = df[['seasons', column_name, 'ema', 'emsd', 
-                        'UCL_1sigma', 'LCL_1sigma', 
-                        'UCL_2sigma', 'LCL_2sigma', 
-                        'UCL_3sigma', 'LCL_3sigma']].to_dict('records')
+        # 準備每個欄位的結果 
+        chart_data = {
+            'seasons': df['seasons'].tolist(), 
+            column_name: df[column_name].tolist(), 
+            'ema': df['ema'].tolist(), 
+            'UCL_1sigma': df['UCL_1sigma'].tolist(), 
+            'LCL_1sigma': df['LCL_1sigma'].tolist(), 
+            'UCL_2sigma': df['UCL_2sigma'].tolist(), 
+            'LCL_2sigma': df['LCL_2sigma'].tolist(), 
+            'UCL_3sigma': df['UCL_3sigma'].tolist(), 
+            'LCL_3sigma': df['LCL_3sigma'].tolist()}
         
         all_charts[column_name] = chart_data
     
     return all_charts
 
-# 管制圖繪製
-def plot_control_chart(charts_data):
-    """
-    為所有欄位繪製管制圖並直接顯示
-    
-    Args:
-        charts_data (dict): 包含所有欄位管制圖數據的字典
-    """
-    import matplotlib.pyplot as plt
-    
-    # 計算需要的子圖數量
-    n_charts = len(charts_data)
-    
-    # 創建圖表和子圖
-    fig, axs = plt.subplots(n_charts, 1, figsize=(12, 5*n_charts))
-    if n_charts == 1:
-        axs = [axs]
-    
-    # 設置子圖之間的間距
-    plt.subplots_adjust(hspace=0.4)
-    
-    for idx, (column_name, chart_data) in enumerate(charts_data.items()):
+#  繪製管制圖
+def plot_control_chart(charts_data): 
+    """ 為所有欄位繪製管制圖並直接顯示 Args: 
+    charts_data (dict): 包含所有欄位管制圖數據的字典 
+    """ 
+    import matplotlib.pyplot as plt 
+    # 計算需要的子圖數量 
+    n_charts = len(charts_data) 
+    # 創建圖表和子圖 
+    fig, axs = plt.subplots(n_charts, 1, figsize=(12, 5*n_charts)) 
+    if n_charts == 1: 
+        axs = [axs] 
+    # 設置子圖之間的間距 
+    plt.subplots_adjust(hspace=0.4) 
+    for idx, (column_name, chart_data) in enumerate(charts_data.items()): 
         # 將數據轉換回 DataFrame
-        df = pd.DataFrame(chart_data)
-        
-        # 獲取當前子圖
-        ax = axs[idx]
-        
-        # 繪製原始數據和 EMA
-        ax.plot(df['seasons'], df[column_name], 'k.-', label='Raw Data')
-        ax.plot(df['seasons'], df['ema'], 'm--', label='EMA')
-        
-        # 繪製控制限
-        # 使用不同顏色的控制線
-        control_limits = [
-            {'sigma': 3, 'color': 'red', 'style': '-'},
-            {'sigma': 2, 'color': 'orange', 'style': ':'},
-            {'sigma': 1, 'color': 'green', 'style': ':'}
-        ]
-        
-        for limit in control_limits:
-            sigma = limit['sigma']
-            color = limit['color']
-            style = limit['style']
+        df = pd.DataFrame(chart_data) 
+        # 獲取當前子圖 
+        ax = axs[idx] 
+        # 繪製原始數據和 EMA 
+        ax.plot(df['seasons'], df[column_name], 'k.-', label='Raw Data') 
+        ax.plot(df['seasons'], df['ema'], 'm--', label='EMA') 
+        # 繪製控制限 
+        # # 使用不同顏色的控制線 
+        control_limits = [ {'sigma': 3, 'color': 'red', 'style': '-'}, 
+                        {'sigma': 2, 'color': 'orange', 'style': ':'}, 
+                        {'sigma': 1, 'color': 'green', 'style': ':'} ] 
+        for limit in control_limits: 
+            sigma = limit['sigma'] 
+            color = limit['color'] 
+            style = limit['style'] 
             
-            # 繪製上下限
+            # 繪製上下限 
             ax.plot(df['seasons'], df[f'UCL_{sigma}sigma'], 
-                   color=color, linestyle=style, 
-                   label=f'+{sigma}σ')
+                    color=color, linestyle=style, label=f'+{sigma}σ') 
             ax.plot(df['seasons'], df[f'LCL_{sigma}sigma'], 
-                   color=color, linestyle=style, 
-                   label=f'-{sigma}σ')
-        
-        # 設置標題和標籤
-        ax.set_title(f'Control Chart - {column_name}')
-        ax.set_xlabel('Seasons')
-        ax.set_ylabel('Value')
-        ax.grid(True, linestyle='--', alpha=0.7)
-        
-        # 旋轉 x 軸標籤以避免重疊
-        ax.tick_params(axis='x', rotation=45)
-        
-        # 添加圖例
-        ax.legend()
-    
-    # 調整布局以確保所有元素都顯示完整
-    plt.tight_layout()
-    
-    # 顯示圖表
-    plt.show()
+                    color=color, linestyle=style, label=f'-{sigma}σ') 
+            # 設置標題和標籤 
+            ax.set_title(f'Control Chart - {column_name}') 
+            ax.set_xlabel('Seasons') 
+            ax.set_ylabel('Value') 
+            ax.grid(True, linestyle='--', alpha=0.7) 
+            # 旋轉 x 軸標籤以避免重疊 
+            ax.tick_params(axis='x', rotation=45) 
+            # 添加圖例 
+            ax.legend() 
+        # 調整布局以確保所有元素都顯示完整
+        plt.tight_layout() 
+        # 顯示圖表 
+        plt.show()
 
 
 if __name__ == '__main__':    
-   control_charts_reports = create_control_charts([{"seasons": "202403", "tagr_q": 34264319, "tagr_y":2}])
+   control_charts_reports = create_control_charts([{"seasons": "202403", "tagr_q": 34264319}])
    print(f'數據:{control_charts_reports}')
    plot_control_chart(control_charts_reports)
-   print(control_charts_reports)
