@@ -94,14 +94,15 @@ def generate_report(data_list):
             "1趨勢分析：各指標的變化趨勢。\n"
             "2異常檢測：指出不尋常的變化並分析原因。\n"
             "3綜合評估：總結財務狀況的風險與優勢。\n"
-            "不須呈現報告日期、報告目的、數據來源、分析方法、開頭回復，只要單純呈現報告即可。"
-        )
+            "不須呈現報告日期、報告目的、數據來源、分析方法、開頭回復，只要**單純呈現報告內容**即可。\n"
+            "一定不要在報告中生成表格，只要文字報告即可。\n"
+           )
         
         # 構建 GPT 模型請求的提示
         system_prompt, user_prompt = construct_prompt(user_input, summary_stats,combined_data)
         
         # 配置模型參數
-        model = "gemini-2.0-flash-thinking-exp-1219"
+        model = "gemini-2.0-flash-exp"
         generation_config = types.GenerateContentConfig(
             max_output_tokens=8000,
             temperature= 0.8,
