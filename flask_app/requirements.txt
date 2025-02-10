@@ -32,6 +32,7 @@ decorator==5.1.1
 defusedxml==0.7.1
 Deprecated==1.2.15
 distro==1.9.0
+dnspython==2.7.0
 duckduckgo_search==6.3.7
 exceptiongroup==1.2.2
 executing==2.1.0
@@ -88,6 +89,7 @@ mdurl==0.1.2
 ml-dtypes==0.4.1
 mss==10.0.0
 multidict==6.1.0
+mysql-connector==2.2.9
 namex==0.0.8
 nest-asyncio==1.6.0
 nodriver==0.38.post1
@@ -116,13 +118,14 @@ pycryptodomex==3.21.0
 pydantic==2.10.2
 pydantic_core==2.27.1
 Pygments==2.18.0
+pymongo==4.10.1
 PyMySQL==1.1.1
 pyparsing==3.2.0
 python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
 python-multipart==0.0.19
 python-socks==2.5.3
 pytz==2024.2
-pywin32==308
 pyzmq==26.2.0
 requests==2.32.3
 requests-oauthlib==2.0.0
@@ -141,7 +144,6 @@ tensorboard-plugin-wit==1.8.1
 tensorflow==2.18.0
 tensorflow-estimator==2.10.0
 tensorflow-io-gcs-filesystem==0.31.0
-tensorflow_intel==2.18.0
 termcolor==2.5.0
 threadpoolctl==3.5.0
 tinycss2==1.4.0
