@@ -54,7 +54,6 @@ mysql -u root -p < database/finvision.sql
 # 6. 修改forecast uri
 修正flask/analysis/forecast.py 第5行，改用字的forecast_api url
 
-
 # 7. 啟動後端應用程式
 python flask_app/app.py
 python forecast_api/app.py
