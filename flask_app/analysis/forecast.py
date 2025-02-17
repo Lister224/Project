@@ -2,7 +2,7 @@ import requests
 
 # 指標預測存取
 def predict_all_indicators(indicator):
-    url = "http://54.160.198.72/predict"
+    url = "http://54.160.198.72/predict" # 這裡請改用你的forecast 網址
 
     try:
         response = requests.post(url, json= indicator)
