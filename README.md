@@ -39,9 +39,11 @@ git clone https://github.com/你的帳號/Finvision-AI.git
 cd Finvision-AI
 
 # 2. 安裝 Python 依賴
+cd flask_app/
 pip install -r requirements.txt
 
 # 3. 建立 MySQL 資料庫
+cd Finvision-AI/SQL_DB/
 mysql -u root -p < database/finvision.sql
 
 # 4. 申請 Google Gemini 2 API
