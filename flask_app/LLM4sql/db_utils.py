@@ -1,42 +1,73 @@
+import os
 import pymysql 
 import pandas as pd 
-from json import loads, dumps 
 import json
+from dotenv import load_dotenv
 from datetime import datetime,date
 from decimal import Decimal
-import os
 
-# 連接到資料庫
-def connect_to_db():
-    try:
-        connection = pymysql.connect(
-            host='127.0.0.1',
-            user='root',
-            password='el89829603',
-            database='finvision',
-            charset='utf8mb4',
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        print("連線成功")
-        return connection
-    except pymysql.MySQLError as e:
-        print(f"帳密或資料庫、伺服器輸入錯誤: {e}")
-        return None
+# db功能設計
+class Database:
+    def __init__(self, host, user, password, database, charset='utf8mb4'):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
+        self.charset = charset
+        self.connection = None
 
-# 執行多筆SQL查詢
-def execute_sql(connection, queries): 
-    try: 
-        with connection.cursor() as cursor: 
-            results = [] 
-            # 拆分成多個 SQL 語句 
-            for query in queries:
-                if query.strip(): # 確保語句不為空 
-                    cursor.execute(query) 
-                    results.append(cursor.fetchall()) 
-            return results 
-    except pymysql.MySQLError as e: 
-        return f"SQL query error: {e}" 
-    finally: connection.close()
+    # 連接到資料庫
+    def connect(self):
+        try:
+            self.connection = pymysql.connect(
+                host= self.host,
+                user= self.user,
+                password= self.password,
+                database= self.database,
+                charset= self.charset,
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            print("連線成功")
+            return self.connection
+        
+        except pymysql.MySQLError as e:
+            print(f"帳密或資料庫、伺服器輸入錯誤: {e}")
+            return None
+        
+    # 資料庫查詢結果結構重構
+    @staticmethod
+    def restructure_data(results):
+        restructured = []
+        if results:
+            for result in results:
+                current_restructured = {}
+                for record in result:
+                    for key, value in record.items():
+                        if key not in current_restructured:
+                            current_restructured[key] = []
+                        current_restructured[key].append(value)
+                restructured.append(current_restructured)
+        
+        return restructured
+
+
+    # 執行多筆SQL查詢
+    def execute_sql(self, queries):
+        try:
+            with self.connection.cursor() as cursor:
+                results = []
+                # 拆分成多個 SQL 語句
+                for query in queries:
+                    if query.strip():  # 確保語句不為空
+                        cursor.execute(query)
+                        results.append(cursor.fetchall())
+                restructured_results = Database.restructure_data(results)
+                return restructured_results
+        except pymysql.MySQLError as e:
+            return f"SQL query error: {e}"
+        finally:
+            self.connection.close()
+
 
 # datetime格式轉換
 def default_converter(o):
@@ -49,8 +80,22 @@ def default_converter(o):
 
 # 返回查詢結果，轉json
 def query_database(sql_query: str):
-    connection = connect_to_db()
-    result = execute_sql(connection, sql_query)
+    # 取得os env資料
+    load_dotenv()
+    db_host = os.environ.get('DB_HOST') 
+    db_user = os.environ.get('DB_USER') 
+    db_password = os.environ.get('DB_PASSWORD') 
+    db_name = os.environ.get('DB_NAME')
+
+    db = Database(host = db_host,
+                  user = db_user, 
+                  password = db_password, 
+                  database = db_name,
+                  )
+
+    db.connect()
+    result = db.execute_sql(sql_query)
+
     # 判斷查詢結果是否成功
     if "SQL query error" not in result:  # 假設 execute_sql 成功時會返回結果，失敗時可能返回 None 或空列表
         return json.dumps({"status": "查詢成功", "data": result}, default=default_converter, ensure_ascii=False)
