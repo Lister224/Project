@@ -1,9 +1,7 @@
-# 📊 [專案名稱]
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-[![GitHub stars](https://img.shields.io/github/stars/你的帳號/你的專案.svg)](https://github.com/你的帳號/你的專案/stargazers)
+# 📊 [Finvision AI]
 
 ## 📖 專案介紹
-這個專案是 **(簡短介紹，例如：一個用 LLM 分析財報的 AI 工具)**，使用了 **Python、AWS、MySQL、MongoDB、Docker** 等技術。
+這個專案是 **一個用 LLM 分析財報的 AI 工具)**，使用了 **Python、AWS、MySQL、MongoDB、Docker** 等技術。
 
 ## 🚀 功能特點
 - 🔍 **財務數據分析**：使用 LLM 自動解析公司財報。
