@@ -1,3 +1,5 @@
 FinVisionAI/
 flask_app/.env
 flask_app/gemini2.json
+index.html
+test.py
