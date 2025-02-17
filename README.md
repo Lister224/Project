@@ -1,38 +1,56 @@
-# 📊 [Finvision AI]
+# 📊 Finvision AI
 
 ## 📖 專案介紹
-這個專案是 **一個用 LLM 分析財報的 AI 工具**，使用了 **Python、AWS、MySQL、MongoDB、Docker** 等技術。
+**Finvision AI** 是一款基於 **LLM（大型語言模型）** 的 AI 工具，專門用於 **財報分析**，幫助投資者與金融分析師快速解析企業財務狀況。  
+此專案使用 **Python、AWS、MySQL、MongoDB、Docker** 等技術，並結合 **機器學習模型（Random Forest、LSTM）** 進行數據分析。
 
 ## 🚀 功能特點
-- 🔍 **財務數據分析**：使用 LLM 自動解析公司財報。
-- 🛠 **支援多種查詢**：提供 MongoDB 和 MySQL 數據存查。
+- 🔍 **財務數據分析**：自動解析企業財報，提供財務指標與趨勢預測。
+- 🛠 **支援多種查詢方式**：可透過 **MongoDB** 與 **MySQL** 存取財報數據。
+- 📈 **數據分析與預測**：結合 **控制圖（Control Chart）、隨機森林（Random Forest）、LSTM** 進行分析。
 
 ## 🏗️ 技術架構
 - **後端**：Python (Flask)
 - **前端**：React / Vue / Next.js
-- **資料庫**：MySQL + MongoDB
-- **雲端服務**：App Runner, EC2
+- **資料庫**：MySQL + MongoDB Atlas
+- **雲端服務**：AWS App Runner, EC2
 - **容器技術**：Docker
-- **數據分析**：Scikit-learn(radom forest), Tensorflow(lstm), Control chart
+- **數據分析**：
+  - Scikit-learn（Random Forest）
+  - TensorFlow（LSTM）
+  - Control Chart 分析
 
-## 📦 安裝與執行
+---
+
+## 📦 本機安裝與執行  
+（如需雲端運行，請自行部署 Docker 映像檔）
+
 ### 1️⃣ **環境需求**
 請確保你的環境具備以下軟體：
 - Python 3.9.8
 - Docker & Docker Compose
-- MySQL & MongoDB
+- MySQL & MongoDB Atlas
+- Google Gemini 2 API 金鑰
 
 ### 2️⃣ **安裝步驟**
 ```bash
 # 1. Clone 專案
-git clone https://github.com/你的帳號/你的專案.git
-cd 你的專案
+git clone https://github.com/你的帳號/Finvision-AI.git
+cd Finvision-AI
 
-# 2. 安裝依賴
+# 2. 安裝 Python 依賴
 pip install -r requirements.txt
 
-# 3. 啟動 Docker 容器
-docker-compose up -d
+# 3. 建立 MySQL 資料庫
+mysql -u root -p < database/finvision.sql
 
-# 4. 啟動應用
-python app.py
+# 4. 申請 Google Gemini 2 API
+# 請至 https://ai.google.dev/ 申請 API 金鑰，下載 JSON 檔案
+# 並將其放置於 flask_app 資料夾內
+
+# 5. 建立 .env 設定檔
+編輯 .env，填入資料庫設定
+
+# 6. 啟動後端應用程式
+python flask_app/app.py
+python forecast_api/app.py
