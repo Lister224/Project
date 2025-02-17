@@ -20,7 +20,7 @@ def extract_sql_queries(sql_response):
         matches = [match.replace('\n', ' ') for match in matches]
         return matches 
     else: 
-        raise ValueError("SQL查詢指令未找到")
+        return("SQL查詢指令未找到")
     
 def generate_sql(user_input):
     try:
@@ -33,8 +33,7 @@ def generate_sql(user_input):
         cfs_columns = "seasons, NICFO, NICFI, NICFF"          # 現金流量表欄位
         index_columns = '''seasons, GPM, OPM, NPM, ROE_Q, ROA_Q, RGR_Q, 
                         TAGR_Q, LTDR, DR, SEQ, CR, QR, CURR, ICR, ART,
-                        IT, TAT, DER, ARD, ITD, OCD, OCF, ICF, FCF,
-                        CAPEX, FCFREE, NCF'''
+                        IT, TAT, DER, ARD, ITD, OCD'''
 
         system_prompt = f'''
             1. 你是一個指標資料庫專家，能夠生成相應的SQL指令。 
@@ -71,7 +70,7 @@ def generate_sql(user_input):
                 )
         
         contents = [types.Content(parts=[
-                types.Part.from_text(system_prompt + user_input + user_prompt)
+                types.Part.from_text(system_prompt + user_prompt + user_input )
             ], role="user")
         ]
 
@@ -95,21 +94,23 @@ def classify_user_input(user_input:str):
         model= "gemini-2.0-flash-exp"
         
         prompt = f'''
+                    以下是prompt內容，請遵照。
                     1.請判斷使用者的輸入是否需要連線到「財務報表」資料庫，或是是關於「財務指標」，若需要請返回finvision即可!
                     2.**請務必讀取這個內容:{csv_table}，若使用者的輸入有在裡面，請返回finvision即可!**
-                    3.若都不屬於查詢、分析財務報表或財務指標範圍，只要返回no即可，不准進行聊天!
+                    3.若都不屬於查詢、分析財務報表或財務指標範圍，只要返回no，**不准進行聊天**!
                     4.財務報表資料庫內容包含資產負債表、損益表、現金流量表、財務指標，其餘公司資料都沒有。
-                    5. **請務必嚴格遵守以上所有指令，你只能返回no或finvision二種狀態。**
+                    5.問題語意不詳，例如「請、我、幫忙、我、你、他」等等，這些**只有單詞不是完整句子**，請返回no。
+                    6.請務必嚴格遵守以上所有指令，你只能返回**no**或**finvision**2種狀態，一定不能返回其他任何回應。
                     '''
 
-        content = [types.Content(parts=[
-                types.Part.from_text(prompt + user_input)
-                ], role="user")
+        content = [
+                types.Content(parts=[types.Part.from_text(user_input)],role="user"),
+                types.Content(parts=[types.Part.from_text(prompt)],role="user")
                 ]
         
         generation_config = types.GenerateContentConfig(
                 max_output_tokens=50,
-                temperature=0.5,
+                temperature=0.1,
                 response_modalities = ["TEXT"]
                 )    
         
@@ -128,12 +129,12 @@ def classify_user_input(user_input:str):
 def llm_generate_sql(user_input):
     
     # LLM判斷使用者輸入類型
-    response = classify_user_input(user_input)
+    response = classify_user_input(user_input).strip()
     
     # 系統不支援問題
     if response == 'no':
         # 返回no
-        return f"no"
+        return 'no'
     
     # LLM連線異常
     if response == 'LLM_error':
@@ -149,6 +150,8 @@ def llm_generate_sql(user_input):
     retries = 0
     while retries <= 5:
         sql_query = extract_sql_queries(sql_response)
+        if sql_query == 'SQL查詢指令未找到':
+            return 'no'
         print(f'生成的SQL指令: {sql_query}')
         report = query_database(sql_query)
         if "查詢成功" in report:

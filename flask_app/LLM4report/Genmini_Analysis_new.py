@@ -82,11 +82,9 @@ def generate_report(data_list):
         # 讀取映射表，將欄位名稱轉換成中文名稱
         column_meanings = csv_read_with_meanings()
         combined_data.rename(columns=column_meanings, inplace=True)
-        print(combined_data)
         
         # 生成描述性統計
         summary_stats = generate_summary(combined_data)
-        print(summary_stats)
         
         # 用戶查詢
         user_input = (
