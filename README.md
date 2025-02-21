@@ -2,7 +2,8 @@
 
 ## 📖 專案介紹
 **Finvision AI** 是一款基於 **LLM（大型語言模型）** 的 AI 工具，專門用於 **財報分析**，幫助投資者與金融分析師快速解析企業財務狀況。  
-此專案使用 **Python、AWS、MySQL、MongoDB、Docker** 等技術，並結合 **機器學習模型（Random Forest、LSTM）** 進行數據分析。
+此專案使用 **Python、AWS、MySQL、MongoDB、Docker** 等技術，並結合 **機器學習模型（Random Forest、LSTM）** 進行數據分析。<br>
+**(詳如Finvision AI簡報)**
 
 ## 🚀 功能特點
 - 🔍 **財務數據分析**：自動解析企業財報，提供財務指標與趨勢預測。
