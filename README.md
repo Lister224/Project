@@ -60,3 +60,14 @@ mysql -u root -p < database/finvision.sql
 # 7. 啟動後端應用程式
 python flask_app/app.py
 python forecast_api/app.py
+```
+
+## 貢獻者
+
+感謝以下人員對本專案的貢獻：
+
+- [PeiYuisme][(https://github.com/PeiYuisme)](https://github.com/PeiYuisme)
+- [cys0621][(https://github.com/cys0621)](https://github.com/cys0621)
+- [Eric891031][(https://github.com/Eric891031)](https://github.com/Eric891031)
+- [xiang104][(https://github.com/xiang104)](https://github.com/xiang104)
+- [weichen129][(https://github.com/weichen129)](https://github.com/weichen129)
