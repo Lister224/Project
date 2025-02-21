@@ -62,7 +62,7 @@ python flask_app/app.py
 python forecast_api/app.py
 ```
 
-## 貢獻者
+## 🤝 貢獻者
 
 感謝以下人員對本專案的貢獻：
 
