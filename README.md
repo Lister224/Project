@@ -40,7 +40,7 @@ git clone https://github.com/你的帳號/Finvision-AI.git
 cd Finvision-AI
 
 # 2. 安裝 Python 依賴
-cd flask_app/
+cd backend_app/
 pip install -r requirements.txt
 
 # 3. 建立 MySQL 資料庫
@@ -49,16 +49,16 @@ mysql -u root -p < database/finvision.sql
 
 # 4. 申請 Google Gemini 2 API
 # 請至 https://ai.google.dev/ 申請 API 金鑰，下載 JSON 檔案
-# 並將其放置於 flask_app 資料夾內
+# 並將其放置於 backend_app 資料夾內
 
 # 5. 建立 .env 設定檔
-編輯 .env，填入資料庫設定
+編輯 .env_example，填入資料庫設定，設定後改名成.env
 
 # 6. 修改forecast uri
-修正flask/analysis/forecast.py 第5行，改用字的forecast_api url
+修正backend_app/analysis/forecast.py 第5行，改用字的forecast_api url
 
 # 7. 啟動後端應用程式
-python flask_app/app.py
+python backend_app/main.py
 python forecast_api/app.py
 ```
 
