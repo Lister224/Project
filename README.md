@@ -11,7 +11,7 @@
 - 📈 **數據分析與預測**：結合 **控制圖（Control Chart）、隨機森林（Random Forest）、LSTM** 進行分析。
 
 ## 🏗️ 技術架構
-- **後端**：Python (Flask)
+- **後端**：Python (Fast、Flask)
 - **前端**：React / Vue / Next.js
 - **資料庫**：MySQL + MongoDB Atlas
 - **雲端服務**：AWS App Runner, EC2
